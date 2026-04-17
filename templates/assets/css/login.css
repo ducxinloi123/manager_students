@@ -1,0 +1,91 @@
+/* Tổng thể container bọc ngoài */
+.login-container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Các ô nhập liệu */
+.form-control {
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #1266f1;
+    box-shadow: 0 0 0 0.2rem rgba(18, 102, 241, 0.25);
+}
+
+/* Label của các ô */
+.form-label {
+    font-weight: 500;
+    color: #4f4f4f;
+    margin-bottom: 5px;
+}
+.btn-primary.btn-block {
+    width: 100% !important;   /* Ép nút dài bằng Form nhưng không bị quá khổ */
+    padding: 8px 16px !important; /* Giảm độ dày của nút (từ 12px xuống 8px) */
+    font-size: 14px !important;   /* Giảm cỡ chữ một chút cho cân đối */
+    margin-bottom: 15px !important; /* Giảm vùng màu cam (margin) xuống */
+    height: auto; 
+    text-transform: none; /* Bỏ viết hoa toàn bộ nếu bạn muốn trông nhẹ nhàng hơn */
+    border-radius: 6px; /* Bo góc nhẹ cho hiện đại */
+}
+/* Nút Sign In */
+.btn-primary {
+    background-color: #1266f1;
+    border: none;
+    padding: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 8px;
+    transition: background 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #0c56d0;
+}
+
+/* Nút mạng xã hội (Facebook, Google...) */
+.btn-floating {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    padding: 0;
+    border-radius: 50%;
+    background-color: #f8f9fa;
+    color: #333;
+    border: 1px solid #ddd;
+    margin: 0 5px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.btn-floating:hover {
+    background-color: #eee;
+    transform: translateY(-3px);
+}
+
+/* Link đăng ký và quên mật khẩu */
+a {
+    color: #1266f1;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.text-center p {
+    color: #757575;
+    font-size: 0.9rem;
+}
