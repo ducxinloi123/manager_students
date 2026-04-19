@@ -15,12 +15,26 @@ require_once './includes/mailer/SMTP.php';
 require_once './templates/assets/layouts/index.php';
 require_once './includes/function.php';
 
-$rel =isPhone('123456789');
-if($rel){
-    echo 'hop le';
-}else{
-    echo 'kh hop le';
+// $rel =isPhone('123456789');
+// if($rel){
+//     echo 'hop le';
+// }else{
+//     echo 'kh hop le';
 
+// }
+if(isPost()){
+    $filter = filterdata();
+    $erorr = [];
+
+    //validate fuullname
+    if(empty(trim($filter['fullname']))){
+        $erorr['fullname']['required'] = "Ho ten bat buoc phai nhap";
+    }
+    else{
+         if(empty(trim($filter['fullname'])) < 5){
+        $erorr['fullname']['length'] = "Ho ten phai lon hon 5 ki tu";
+    }
+    }
 }
 // $rel = validateInt('6.5');
 // var_dump($rel);
