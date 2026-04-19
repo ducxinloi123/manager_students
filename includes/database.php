@@ -24,7 +24,7 @@ function getRows($sql){
 
     return $rel;
 }
-function getOneAll($sql){
+function getOne($sql){
     global $conn;
 
     $stm = $conn -> prepare($sql);
@@ -52,12 +52,13 @@ function insert($table, $data){
     $place = ':'.implode(',:', $keys);
 
     $sql = "INSERT INTO $table ($cot) VALUES ($place)"; // :name, :email...
-    echo $sql;
+    // echo $sql;
 
     $stm = $conn -> prepare($sql); // Chống SQL Injection
 
     // Thực thi câu lệnh
-    $stm -> execute($data);
+    $rel =$stm -> execute($data);
+    return $rel;
 }
 // Update dữ liệu
 function update($table, $data, $condition){

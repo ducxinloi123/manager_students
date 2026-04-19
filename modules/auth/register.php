@@ -26,8 +26,8 @@ if(isPost()){
         }else{
             $email = $filter['email'];
             $checkmail = getRows("SELECT * FROM users where Email ='$email'");
-            var_dump($checkmail);
-            if($checkmail >0){
+            // var_dump($checkmail);
+            if($checkmail > 0){
                 $erorr['email']['check'] = 'Email da ton tai';
             }
         }
@@ -59,14 +59,77 @@ if(isPost()){
         $erorr['confirm_password']['like'] = 'mat khau khong khop';
         }
     }
-   
-    if (empty($erorr)){
-         $msg = 'Đăng ký thành công!';
+//    if(!empty($filter)){
+//     $filterArr = filterData();
+//     echo '<pre>';
+//     print_r($filter);
+//     echo '</pre>';
+// die();
+// }
+if (empty($erorr)){
+    $activeToken = sha1(uniqid().time());
+    
+    $data = [
+        'FullName'     => $filter['fullname'],
+        'Email'        => $filter['email'],
+        'Phone'        => $filter['phone'],
+        'password'     => password_hash($filter['password'], PASSWORD_DEFAULT),
+        'Address'      => $filter['address'] ?? null, // Dùng ?? null để tránh lỗi Undefined
+        'Foget_token'  => '',                        // Bổ sung dòng này để sửa lỗi Fatal
+        'Active_token' => $activeToken,
+        'Status'       => 0,
+        'Group_id'     => 1,
+        'Create_at'    => date('Y-m-d H:i:s'),
+    ];
+
+    $insertStatus = insert('users', $data);
+    
+    if($insertStatus){
+        $to = $filter['email'];
+    $subject = 'Kích hoạt tài khoản Manager Students - Nhân Đức';
+    
+    // Tạo link kích hoạt
+    $linkActive = _HOST_URL.'/?module=auth&action=active&token='.$activeToken;
+
+    // 2. Thiết kế nội dung mail bằng HTML & CSS (Inline)
+    $content = '
+    <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #ddd; border-radius: 10px; overflow: hidden;">
+        <div style="background-color: #007bff; color: white; padding: 20px; text-align: center;">
+            <h2 style="margin: 0;">Chào mừng bạn đến với Manager Students!</h2>
+        </div>
+        <div style="padding: 20px;">
+            <p>Chào <strong>'.$filter['fullname'].'</strong>,</p>
+            <p>Chúc mừng bạn đã đăng ký thành công tài khoản tại hệ thống của <strong>Nhân Đức</strong>.</p>
+            <p>Để bắt đầu sử dụng, bạn vui lòng nhấn vào nút bên dưới để kích hoạt tài khoản:</p>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="'.$linkActive.'" style="background-color: #28a745; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;">KÍCH HOẠT TÀI KHOẢN</a>
+            </div>
+
+            <p style="font-size: 0.9em; color: #666;">Nếu nút trên không hoạt động, bạn có thể copy link sau và dán vào trình duyệt:</p>
+            <p style="font-size: 0.8em; color: #007bff; word-break: break-all;">'.$linkActive.'</p>
+        </div>
+        <div style="background-color: #f8f9fa; padding: 15px; text-align: center; font-size: 0.8em; color: #777; border-top: 1px solid #ddd;">
+            Cảm ơn bạn đã ủng hộ Dev Nhân Đức.<br>
+            Đây là email tự động, vui lòng không phản hồi email này.
+        </div>
+    </div>
+    ';
+        sendMail($to, $subject, $content);
+        $msg = 'Đăng ký thành công!';
+        // Redirect hoặc xóa session cũ...
+    } else {
+        $msg = 'Lỗi hệ thống không thể đăng ký.';
     }
+}
     else {
         $msg = 'Dữ liệu không hợp lệ, vui lòng kiểm tra lại!';
+        setSessionFlash('olddata',$filter);
+        setSessionFlash('error',$erorr);
 
     }
+    $olddata = getSessionFlash('olddata');
+    $erorrArr = getSession('error');
 }
 
 
@@ -78,7 +141,7 @@ if(isPost()){
 //     print_r($erorr);
 //     echo '</pre>';
 // die();
-// }
+// }erorr 
 
 ?>
 <div class="container" style="max-width: 500px; margin: 50px auto;">
@@ -95,7 +158,7 @@ if(isPost()){
             <div class="form-outline mb-3">
                 <label class="form-label">Full Name</label>
                 <input type="text" name="fullname" class="form-control" placeholder="Nhập họ tên..." value="<?php echo $filter['fullname'] ?? ''; ?>" />
-                <?php echo (!empty($erorr['fullname'])) ? '<small class="text-danger">'.reset($erorr['fullname']).'</small>' : ''; ?>
+                <?php echo (!empty($erorr['fullname'])) ? '<small class="text-danger">'.reset($erorr['fullname']).'</small>' : '';  ?>
             </div>
 
             <div class="form-outline mb-3">
